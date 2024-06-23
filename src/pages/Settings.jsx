@@ -104,7 +104,7 @@ const Settings = () => {
 
   return (
     <Container centerContent maxW="container.md" py={10}>
-      <VStack spacing={4} width="100%">
+      <VStack spacing={{ base: 2, md: 4 }} width="100%">
         <Heading as="h1" size="xl">Account Settings</Heading>
 
         <Box width="100%" borderWidth="1px" borderRadius="lg" p={5}>

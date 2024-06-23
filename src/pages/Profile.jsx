@@ -132,7 +132,7 @@ const Profile = () => {
           </Box>
         )}
         <Heading as="h2" size="lg">Services</Heading>
-        <HStack spacing={4} width="100%">
+        <HStack spacing={{ base: 2, md: 4 }} width="100%">
           {services.map(service => (
             <Box key={service.id} borderWidth="1px" borderRadius="lg" p={4} width="100%">
               <Heading as="h3" size="md">{service.name}</Heading>

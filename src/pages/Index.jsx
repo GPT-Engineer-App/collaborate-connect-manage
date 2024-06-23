@@ -135,7 +135,7 @@ const Index = () => {
           ))}
         </Select>
         <Map onRadiusChange={setRadius} onCenterChange={setMapCenter} />
-        <SimpleGrid columns={[1, 2, 3]} spacing={5} width="100%">
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={5} width="100%">
           {filteredProviders.map(provider => (
             <Box key={provider.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
               <Image src={provider.imageUrl} alt={provider.name} />
@@ -197,12 +197,12 @@ const Index = () => {
         </VStack>
       </VStack>
       <HStack
-        spacing={4}
+        spacing={{ base: 2, md: 4 }}
         position="fixed"
         bottom={0}
         width="100%"
         bg="white"
-        p={4}
+        p={{ base: 2, md: 4 }}
         justifyContent="space-around"
         boxShadow="md"
       >
