@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Container, Text, VStack, Input, Select, SimpleGrid, Box, Heading, Image } from "@chakra-ui/react";
-
-// Example of using react-icons
-// import { FaRocket } from "react-icons/fa";
-// <IconButton aria-label="Add" icon={<FaRocket />} size="lg" />; // IconButton would also have to be imported from chakra
+import { Container, Text, VStack, Input, Select, SimpleGrid, Box, Heading, Image, Button } from "@chakra-ui/react";
+import { useSupabaseAuth } from "../integrations/supabase/auth";
+import { supabase } from "../integrations/supabase/index";
 
 const serviceProviders = [
   { id: 1, name: "John Doe", category: "Plumbing", imageUrl: "https://via.placeholder.com/150" },
@@ -15,8 +13,26 @@ const serviceProviders = [
 const categories = ["All", "Plumbing", "Electrical", "Cleaning", "Landscaping"];
 
 const Index = () => {
+  const { session } = useSupabaseAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const handleAddFavorite = async (providerId) => {
+    if (!session) {
+      alert("You need to be logged in to add favorites.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("favorites")
+      .insert([{ user_id: session.user.id, provider_id: providerId }]);
+
+    if (error) {
+      console.error("Error adding favorite:", error);
+    } else {
+      alert("Added to favorites!");
+    }
+  };
 
   const filteredProviders = serviceProviders.filter(provider => {
     return (
@@ -24,6 +40,7 @@ const Index = () => {
       provider.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
   return (
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
@@ -49,6 +66,7 @@ const Index = () => {
               <Box p={5}>
                 <Heading as="h3" size="md">{provider.name}</Heading>
                 <Text>{provider.category}</Text>
+                <Button colorScheme="blue" onClick={() => handleAddFavorite(provider.id)}>Add to Favorites</Button>
               </Box>
             </Box>
           ))}
