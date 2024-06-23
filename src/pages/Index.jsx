@@ -20,6 +20,8 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
   const [radius, setRadius] = useState(1000);
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState({ title: "", description: "", category: "", priority: "", due_date: "" });
 
   const handleAddFavorite = async (providerId) => {
     if (!session) {
@@ -44,7 +46,60 @@ const Index = () => {
 
   useEffect(() => {
     fetchProvidersWithinRadius(mapCenter, radius);
+    fetchTasks();
   }, [mapCenter, radius]);
+
+  const fetchTasks = async () => {
+    const { data, error } = await supabase
+      .from("tasks")
+      .select("*")
+      .eq("user_id", session.user.id);
+
+    if (error) {
+      console.error("Error fetching tasks:", error);
+    } else {
+      setTasks(data);
+    }
+  };
+
+  const handleCreateTask = async () => {
+    const { error } = await supabase
+      .from("tasks")
+      .insert([{ ...newTask, user_id: session.user.id }]);
+
+    if (error) {
+      console.error("Error creating task:", error);
+    } else {
+      fetchTasks();
+      setNewTask({ title: "", description: "", category: "", priority: "", due_date: "" });
+    }
+  };
+
+  const handleEditTask = async (taskId, updatedTask) => {
+    const { error } = await supabase
+      .from("tasks")
+      .update(updatedTask)
+      .eq("task_id", taskId);
+
+    if (error) {
+      console.error("Error updating task:", error);
+    } else {
+      fetchTasks();
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    const { error } = await supabase
+      .from("tasks")
+      .delete()
+      .eq("task_id", taskId);
+
+    if (error) {
+      console.error("Error deleting task:", error);
+    } else {
+      fetchTasks();
+    }
+  };
 
   const filteredProviders = serviceProviders.filter(provider => {
     return (
@@ -84,6 +139,54 @@ const Index = () => {
             </Box>
           ))}
         </SimpleGrid>
+        <Heading as="h2" size="lg">Your Tasks</Heading>
+        <VStack spacing={4} width="100%">
+          {tasks.map(task => (
+            <Box key={task.task_id} borderWidth="1px" borderRadius="lg" p={4} width="100%">
+              <Heading as="h3" size="md">{task.title}</Heading>
+              <Text>{task.description}</Text>
+              <Text>Category: {task.category}</Text>
+              <Text>Priority: {task.priority}</Text>
+              <Text>Due Date: {task.due_date}</Text>
+              <Button colorScheme="blue" onClick={() => handleEditTask(task.task_id, { ...task, title: "Updated Title" })}>Edit</Button>
+              <Button colorScheme="red" onClick={() => handleDeleteTask(task.task_id)}>Delete</Button>
+            </Box>
+          ))}
+        </VStack>
+        <Heading as="h2" size="lg">Create New Task</Heading>
+        <VStack spacing={4} width="100%">
+          <Input
+            placeholder="Title"
+            value={newTask.title}
+            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+          />
+          <Input
+            placeholder="Description"
+            value={newTask.description}
+            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+          />
+          <Select
+            placeholder="Category"
+            value={newTask.category}
+            onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
+          >
+            {categories.map(category => (
+              <option key={category} value={category}>{category}</option>
+            ))}
+          </Select>
+          <Input
+            placeholder="Priority"
+            value={newTask.priority}
+            onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+          />
+          <Input
+            placeholder="Due Date"
+            type="date"
+            value={newTask.due_date}
+            onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
+          />
+          <Button colorScheme="blue" onClick={handleCreateTask}>Create Task</Button>
+        </VStack>
       </VStack>
       <HStack
         spacing={4}
