@@ -22,6 +22,7 @@ const Index = () => {
   const [radius, setRadius] = useState(1000);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: "", description: "", category: "", priority: "", due_date: "" });
+  const [providers, setProviders] = useState([]);
 
   const handleAddFavorite = async (providerId) => {
     if (!session) {
@@ -41,7 +42,14 @@ const Index = () => {
   };
 
   const fetchProvidersWithinRadius = async (center, radius) => {
-    // Fetch providers logic here
+    const { data, error } = await supabase
+      .rpc('get_providers_within_radius', { center_lat: center[0], center_lng: center[1], radius });
+
+    if (error) {
+      console.error("Error fetching providers:", error);
+    } else {
+      setProviders(data);
+    }
   };
 
   useEffect(() => {
@@ -101,7 +109,7 @@ const Index = () => {
     }
   };
 
-  const filteredProviders = serviceProviders.filter(provider => {
+  const filteredProviders = providers.filter(provider => {
     return (
       (selectedCategory === "All" || provider.category === selectedCategory) &&
       provider.name.toLowerCase().includes(searchTerm.toLowerCase())
