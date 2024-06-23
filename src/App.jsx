@@ -6,17 +6,20 @@ import Favorites from "./pages/Favorites.jsx";
 import Messages from "./pages/Messages.jsx";
 import Settings from "./pages/Settings.jsx";
 import NavigationBar from "./components/NavigationBar.jsx";
+import Login from "./pages/Login.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route exact path="/" element={<Index />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/favorites" element={<Favorites />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+        <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
+        <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <NavigationBar />
     </Router>
