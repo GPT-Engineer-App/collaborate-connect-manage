@@ -5,6 +5,7 @@ import Booking from "./pages/Booking.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import Messages from "./pages/Messages.jsx";
 import Settings from "./pages/Settings.jsx";
+import NavigationBar from "./components/NavigationBar.jsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
+      <NavigationBar />
     </Router>
   );
 }

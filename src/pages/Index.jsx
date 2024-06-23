@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Container, Text, VStack, Input, Select, SimpleGrid, Box, Heading, Image, Button } from "@chakra-ui/react";
+import { Container, Text, VStack, Input, Select, SimpleGrid, Box, Heading, Image, Button, HStack, IconButton } from "@chakra-ui/react";
 import { useSupabaseAuth } from "../integrations/supabase/auth";
 import { supabase } from "../integrations/supabase/index";
 import Map from '../components/Map';
+import { FaHome, FaStar, FaEnvelope, FaUser, FaCog } from 'react-icons/fa';
 
 const serviceProviders = [
   { id: 1, name: "John Doe", category: "Plumbing", imageUrl: "https://via.placeholder.com/150" },
@@ -84,6 +85,22 @@ const Index = () => {
           ))}
         </SimpleGrid>
       </VStack>
+      <HStack
+        spacing={4}
+        position="fixed"
+        bottom={0}
+        width="100%"
+        bg="white"
+        p={4}
+        justifyContent="space-around"
+        boxShadow="md"
+      >
+        <IconButton icon={<FaHome />} aria-label="Home" />
+        <IconButton icon={<FaStar />} aria-label="Favorites" />
+        <IconButton icon={<FaEnvelope />} aria-label="Messages" />
+        <IconButton icon={<FaUser />} aria-label="Profile" />
+        <IconButton icon={<FaCog />} aria-label="Settings" />
+      </HStack>
     </Container>
   );
 };
