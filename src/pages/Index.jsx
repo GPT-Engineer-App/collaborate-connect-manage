@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Text, VStack, Input, Select, SimpleGrid, Box, Heading, Image, Button } from "@chakra-ui/react";
 import { useSupabaseAuth } from "../integrations/supabase/auth";
 import { supabase } from "../integrations/supabase/index";
+import Map from '../components/Map';
 
 const serviceProviders = [
   { id: 1, name: "John Doe", category: "Plumbing", imageUrl: "https://via.placeholder.com/150" },
@@ -16,6 +17,8 @@ const Index = () => {
   const { session } = useSupabaseAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [mapCenter, setMapCenter] = useState([51.505, -0.09]);
+  const [radius, setRadius] = useState(1000);
 
   const handleAddFavorite = async (providerId) => {
     if (!session) {
@@ -33,6 +36,14 @@ const Index = () => {
       alert("Added to favorites!");
     }
   };
+
+  const fetchProvidersWithinRadius = async (center, radius) => {
+    // Fetch providers logic here
+  };
+
+  useEffect(() => {
+    fetchProvidersWithinRadius(mapCenter, radius);
+  }, [mapCenter, radius]);
 
   const filteredProviders = serviceProviders.filter(provider => {
     return (
@@ -59,6 +70,7 @@ const Index = () => {
             <option key={category} value={category}>{category}</option>
           ))}
         </Select>
+        <Map onRadiusChange={setRadius} onCenterChange={setMapCenter} />
         <SimpleGrid columns={[1, 2, 3]} spacing={5} width="100%">
           {filteredProviders.map(provider => (
             <Box key={provider.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
