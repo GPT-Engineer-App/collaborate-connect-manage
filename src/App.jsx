@@ -4,6 +4,7 @@ import Profile from "./pages/Profile.jsx";
 import Booking from "./pages/Booking.jsx";
 import Favorites from "./pages/Favorites.jsx";
 import Messages from "./pages/Messages.jsx";
+import Settings from "./pages/Settings.jsx";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/booking" element={<Booking />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );
