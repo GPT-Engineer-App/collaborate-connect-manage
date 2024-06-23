@@ -65,7 +65,7 @@ const Messages = () => {
     <Container centerContent maxW="container.md" py={10}>
       <VStack spacing={4} width="100%">
         <Heading as="h1" size="xl">Messages</Heading>
-        <HStack spacing={4} width="100%">
+        <HStack spacing={{ base: 2, md: 4 }} width="100%">
           <VStack spacing={4} width="30%" align="stretch">
             {conversations.map((conversation) => (
               <Box
@@ -90,7 +90,7 @@ const Messages = () => {
                     </Box>
                   ))}
                 </Box>
-                <HStack spacing={4}>
+                <HStack spacing={{ base: 2, md: 4 }}>
                   <Input
                     placeholder="Type your message"
                     value={newMessage}

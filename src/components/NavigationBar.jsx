@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const NavigationBar = () => {
   return (
     <Box position="fixed" bottom="0" width="100%" bg="white" boxShadow="md">
-      <Flex justify="space-around" p={2}>
+      <Flex justify="space-around" p={{ base: 2, md: 4 }} spacing={{ base: 2, md: 4 }}>
         <Link to="/">
           <IconButton icon={<FaHome />} aria-label="Home" />
         </Link>

@@ -48,7 +48,7 @@ const Favorites = () => {
 
   return (
     <Container centerContent maxW="container.md" py={10}>
-      <VStack spacing={4} width="100%">
+      <VStack spacing={{ base: 2, md: 4 }} width="100%">
         <Heading as="h1" size="xl">Your Favorites</Heading>
         {favorites.length === 0 ? (
           <Text>No favorite providers found.</Text>

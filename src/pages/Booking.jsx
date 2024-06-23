@@ -18,7 +18,7 @@ const Booking = () => {
 
   return (
     <Container centerContent maxW="container.md" py={10}>
-      <VStack spacing={4} width="100%">
+      <VStack spacing={{ base: 2, md: 4 }} width="100%">
         <Heading as="h1" size="xl">Book a Service</Heading>
         <Input
           placeholder="Select date"
