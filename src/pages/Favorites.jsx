@@ -53,7 +53,7 @@ const Favorites = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // Added CORS header
         },
         body: JSON.stringify({
           user_id: session.user.id,
