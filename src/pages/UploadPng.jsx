@@ -18,7 +18,20 @@ const UploadPng = () => {
         setSuccess(null);
 
         try {
-            const result = await uploadPngFiles(files);
+            const response = await fetch('https://example.com/api/upload-png', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ files }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data);
             setSuccess('Files uploaded successfully!');
         } catch (error) {
             setError('Error uploading files.');
