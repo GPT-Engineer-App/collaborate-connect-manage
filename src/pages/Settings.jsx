@@ -72,12 +72,20 @@ const Settings = () => {
 
   const handleProfileUpdate = async () => {
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update(profile)
-        .eq("user_id", session.user.id);
+      const response = await fetch('https://example.com/api/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profile),
+      });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
       alert("Profile updated successfully!");
     } catch (error) {
       setError(error.message);
@@ -86,12 +94,20 @@ const Settings = () => {
 
   const handleNotificationUpdate = async () => {
     try {
-      const { error } = await supabase
-        .from("notification_preferences")
-        .update(notifications)
-        .eq("user_id", session.user.id);
+      const response = await fetch('https://example.com/api/update-notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notifications),
+      });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
       alert("Notification preferences updated successfully!");
     } catch (error) {
       setError(error.message);
@@ -100,12 +116,20 @@ const Settings = () => {
 
   const handlePrivacyUpdate = async () => {
     try {
-      const { error } = await supabase
-        .from("privacy_settings")
-        .update(privacy)
-        .eq("user_id", session.user.id);
+      const response = await fetch('https://example.com/api/update-privacy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(privacy),
+      });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
       alert("Privacy settings updated successfully!");
     } catch (error) {
       setError(error.message);

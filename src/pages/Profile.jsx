@@ -52,31 +52,47 @@ const Profile = () => {
 
   const handleProfileUpdate = async () => {
     try {
-        const { error } = await supabase
-            .from("profiles")
-            .update(profileData)
-            .eq("user_id", session.user.id);
+      const response = await fetch('https://example.com/api/update-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(profileData),
+      });
 
-        if (error) throw error;
-        alert("Profile updated successfully!");
-        setIsEditing(false);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      alert("Profile updated successfully!");
+      setIsEditing(false);
     } catch (error) {
-        console.error("Error updating profile:", error);
+      console.error("Error updating profile:", error);
     }
   };
 
   const handleServiceUpdate = async () => {
     try {
-        const { error } = await supabase
-            .from("services")
-            .update(serviceData)
-            .eq("id", selectedService.id);
+      const response = await fetch('https://example.com/api/update-service', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(serviceData),
+      });
 
-        if (error) throw error;
-        alert("Service updated successfully!");
-        setSelectedService(null);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      alert("Service updated successfully!");
+      setSelectedService(null);
     } catch (error) {
-        console.error("Error updating service:", error);
+      console.error("Error updating service:", error);
     }
   };
 

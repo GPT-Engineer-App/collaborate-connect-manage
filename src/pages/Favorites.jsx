@@ -46,13 +46,23 @@ const Favorites = () => {
 
   const handleRemoveFavorite = async (providerId) => {
     try {
-      const { error } = await supabase
-        .from("favorites")
-        .delete()
-        .eq("user_id", session.user.id)
-        .eq("provider_id", providerId);
+      const response = await fetch('https://example.com/api/remove-favorite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: session.user.id,
+          provider_id: providerId,
+        }),
+      });
 
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
       fetchFavorites();
     } catch (error) {
       console.error("Error removing favorite:", error);

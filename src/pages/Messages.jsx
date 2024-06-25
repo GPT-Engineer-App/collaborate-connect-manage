@@ -48,15 +48,28 @@ const Messages = () => {
     if (newMessage.trim() === "") return;
 
     try {
-        const { error } = await supabase
-            .from("messages")
-            .insert([{ conversation_id: selectedConversation.id, sender_id: session.user.id, content: newMessage }]);
+      const response = await fetch('https://example.com/api/send-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          conversation_id: selectedConversation.id,
+          sender_id: session.user.id,
+          content: newMessage,
+        }),
+      });
 
-        if (error) throw error;
-        setNewMessage("");
-        fetchMessages(selectedConversation.id);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setNewMessage("");
+      fetchMessages(selectedConversation.id);
     } catch (error) {
-        console.error("Error sending message:", error);
+      console.error("Error sending message:", error);
     }
   };
 

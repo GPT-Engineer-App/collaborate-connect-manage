@@ -12,11 +12,29 @@ const Booking = () => {
 
   const handleBooking = async () => {
     try {
-        // Handle booking logic here
-        console.log({ date, time, location, message, paymentMethod });
-        navigate("/confirmation");
+      const response = await fetch('https://example.com/api/booking', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          date,
+          time,
+          location,
+          message,
+          paymentMethod,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      navigate("/confirmation");
     } catch (error) {
-        console.error("Error handling booking:", error);
+      console.error("Error handling booking:", error);
     }
   };
 
