@@ -24,7 +24,10 @@ const Favorites = () => {
         .select("provider_id, providers (id, name, category, imageUrl)")
         .eq("user_id", session.user.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error:', error);
+        throw error;
+      }
       setFavorites(data);
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -50,6 +53,7 @@ const Favorites = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify({
           user_id: session.user.id,
@@ -58,6 +62,8 @@ const Favorites = () => {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 

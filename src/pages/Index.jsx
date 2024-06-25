@@ -46,7 +46,10 @@ const Index = () => {
       const { data, error } = await supabase
         .rpc('get_providers_within_radius', { center_lat: center[0], center_lng: center[1], radius });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error:', error);
+        throw error;
+      }
       setProviders(data);
     } catch (error) {
       console.error("Error fetching providers:", error);

@@ -76,11 +76,14 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(profile),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 
@@ -98,11 +101,14 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(notifications),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 
@@ -120,11 +126,14 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(privacy),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 

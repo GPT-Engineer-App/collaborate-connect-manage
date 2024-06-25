@@ -56,11 +56,14 @@ const Profile = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(profileData),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 
@@ -79,11 +82,14 @@ const Profile = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(serviceData),
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 
@@ -103,7 +109,10 @@ const Profile = () => {
             .delete()
             .eq("id", serviceId);
 
-        if (error) throw error;
+        if (error) {
+            console.error('Error:', error);
+            throw error;
+        }
         fetchServices();
         setSelectedService(null);
     } catch (error) {
