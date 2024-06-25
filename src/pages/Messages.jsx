@@ -17,30 +17,36 @@ const Messages = () => {
 
   const fetchConversations = async () => {
     try {
-        const { data, error } = await supabase
-            .from("conversations")
-            .select("id, provider_id, providers (name)")
-            .eq("user_id", session.user.id);
+      const { data, error } = await supabase
+        .from("conversations")
+        .select("id, provider_id, providers (name)")
+        .eq("user_id", session.user.id);
 
-        if (error) throw error;
-        setConversations(data);
+      if (error) {
+        console.error('Error:', error);
+        throw error;
+      }
+      setConversations(data);
     } catch (error) {
-        console.error("Error fetching conversations:", error);
+      console.error("Error fetching conversations:", error);
     }
   };
 
   const fetchMessages = async (conversationId) => {
     try {
-        const { data, error } = await supabase
-            .from("messages")
-            .select("*")
-            .eq("conversation_id", conversationId)
-            .order("created_at", { ascending: true });
+      const { data, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true });
 
-        if (error) throw error;
-        setSelectedConversation({ id: conversationId, messages: data });
+      if (error) {
+        console.error('Error:', error);
+        throw error;
+      }
+      setSelectedConversation({ id: conversationId, messages: data });
     } catch (error) {
-        console.error("Error fetching messages:", error);
+      console.error("Error fetching messages:", error);
     }
   };
 
@@ -52,6 +58,7 @@ const Messages = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // Added CORS header
         },
         body: JSON.stringify({
           conversation_id: selectedConversation.id,
@@ -61,6 +68,8 @@ const Messages = () => {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 

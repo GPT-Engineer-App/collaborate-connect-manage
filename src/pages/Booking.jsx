@@ -16,6 +16,7 @@ const Booking = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // Added CORS header
         },
         body: JSON.stringify({
           date,
@@ -27,6 +28,8 @@ const Booking = () => {
       });
 
       if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
         throw new Error('Network response was not ok');
       }
 
