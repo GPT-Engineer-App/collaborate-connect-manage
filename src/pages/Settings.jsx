@@ -76,7 +76,7 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Added CORS header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(profile),
       });
@@ -101,7 +101,7 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Added CORS header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(notifications),
       });
@@ -126,7 +126,7 @@ const Settings = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Added CORS header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(privacy),
       });

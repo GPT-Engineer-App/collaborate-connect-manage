@@ -56,7 +56,7 @@ const Profile = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Added CORS header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(profileData),
       });
@@ -82,7 +82,7 @@ const Profile = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Added CORS header
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(serviceData),
       });
