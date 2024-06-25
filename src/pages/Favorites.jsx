@@ -7,11 +7,13 @@ import { supabase } from "../integrations/supabase/index";
 const Favorites = () => {
   const { session } = useSupabaseAuth();
   const [favorites, setFavorites] = useState([]);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (session) {
       fetchFavorites();
+      fetchUsers();
     }
   }, [session]);
 
@@ -25,6 +27,18 @@ const Favorites = () => {
       console.error("Error fetching favorites:", error);
     } else {
       setFavorites(data);
+    }
+  };
+
+  const fetchUsers = async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, username, email");
+
+    if (error) {
+      console.error("Error fetching users:", error);
+    } else {
+      setUsers(data);
     }
   };
 
@@ -61,6 +75,17 @@ const Favorites = () => {
                 <Text>{providers.category}</Text>
                 <Button colorScheme="red" onClick={() => handleRemoveFavorite(provider_id)}>Remove from Favorites</Button>
               </Box>
+            </Box>
+          ))
+        )}
+        <Heading as="h2" size="lg" mt={10}>Browse Users</Heading>
+        {users.length === 0 ? (
+          <Text>No users found.</Text>
+        ) : (
+          users.map(user => (
+            <Box key={user.id} borderWidth="1px" borderRadius="lg" p={5} width="100%">
+              <Heading as="h3" size="md">{user.username}</Heading>
+              <Text>{user.email}</Text>
             </Box>
           ))
         )}
