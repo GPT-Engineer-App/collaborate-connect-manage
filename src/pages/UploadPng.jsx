@@ -33,8 +33,8 @@ const UploadPng = () => {
                 <Heading as="h1" size="xl">Upload PNG Files</Heading>
                 <Input type="file" multiple onChange={handleFileChange} />
                 <Button colorScheme="blue" onClick={handleUpload} isLoading={uploading}>Upload</Button>
-                {error &amp;&amp; <Text color="red.500">{error}</Text>}
-                {success &amp;&amp; <Text color="green.500">{success}</Text>}
+                {error && <Text color="red.500">{error}</Text>}
+                {success && <Text color="green.500">{success}</Text>}
             </VStack>
         </Container>
     );
