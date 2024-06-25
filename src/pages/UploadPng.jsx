@@ -18,13 +18,17 @@ const UploadPng = () => {
         setSuccess(null);
 
         try {
-            const response = await fetch('https://example.com/api/upload-png', {
+            const formData = new FormData();
+            files.forEach(file => {
+                formData.append('files', file);
+            });
+
+            const response = await fetch('https://vmbsgflfyqxvqzofheja.supabase.co/storage/v1/bucket/upload-png', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*', // Added CORS header
                 },
-                body: JSON.stringify({ files }),
+                body: formData,
             });
 
             if (!response.ok) {
