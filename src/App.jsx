@@ -8,7 +8,7 @@ import Settings from "./pages/Settings.jsx";
 import NavigationBar from "./components/NavigationBar.jsx";
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import UploadPng from "./pages/UploadPng.jsx";
+import Files from "./pages/Files.jsx";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
-        <Route path="/upload-png" element={<ProtectedRoute><UploadPng /></ProtectedRoute>} />
+        <Route path="/files" element={<ProtectedRoute><Files /></ProtectedRoute>} />
       </Routes>
       <NavigationBar />
     </Router>
