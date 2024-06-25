@@ -3,7 +3,7 @@ import { supabase, SupabaseProvider } from './index.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { corsHeaders, handleOptionsRequest } from '../_shared/cors';
+import { corsHeaders, handleOptionsRequest } from '../_shared/cors.js';
 
 const SupabaseAuthContext = createContext();
 
