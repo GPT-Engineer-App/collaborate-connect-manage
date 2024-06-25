@@ -8,6 +8,8 @@ const Settings = () => {
   const [profile, setProfile] = useState({ username: "", email: "", bio: "" });
   const [notifications, setNotifications] = useState({ email: false, sms: false });
   const [privacy, setPrivacy] = useState({ profileVisibility: "public" });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (session) {
@@ -18,88 +20,108 @@ const Settings = () => {
   }, [session]);
 
   const fetchProfile = async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("username, email, bio")
-      .eq("user_id", session.user.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("username, email, bio")
+        .eq("user_id", session.user.id)
+        .single();
 
-    if (error) {
-      console.error("Error fetching profile:", error);
-    } else {
+      if (error) throw error;
       setProfile(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchNotificationPreferences = async () => {
-    const { data, error } = await supabase
-      .from("notification_preferences")
-      .select("email, sms")
-      .eq("user_id", session.user.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("notification_preferences")
+        .select("email, sms")
+        .eq("user_id", session.user.id)
+        .single();
 
-    if (error) {
-      console.error("Error fetching notification preferences:", error);
-    } else {
+      if (error) throw error;
       setNotifications(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchPrivacySettings = async () => {
-    const { data, error } = await supabase
-      .from("privacy_settings")
-      .select("profile_visibility")
-      .eq("user_id", session.user.id)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("privacy_settings")
+        .select("profile_visibility")
+        .eq("user_id", session.user.id)
+        .single();
 
-    if (error) {
-      console.error("Error fetching privacy settings:", error);
-    } else {
+      if (error) throw error;
       setPrivacy(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleProfileUpdate = async () => {
-    const { error } = await supabase
-      .from("profiles")
-      .update(profile)
-      .eq("user_id", session.user.id);
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update(profile)
+        .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error updating profile:", error);
-    } else {
+      if (error) throw error;
       alert("Profile updated successfully!");
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   const handleNotificationUpdate = async () => {
-    const { error } = await supabase
-      .from("notification_preferences")
-      .update(notifications)
-      .eq("user_id", session.user.id);
+    try {
+      const { error } = await supabase
+        .from("notification_preferences")
+        .update(notifications)
+        .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error updating notification preferences:", error);
-    } else {
+      if (error) throw error;
       alert("Notification preferences updated successfully!");
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   const handlePrivacyUpdate = async () => {
-    const { error } = await supabase
-      .from("privacy_settings")
-      .update(privacy)
-      .eq("user_id", session.user.id);
+    try {
+      const { error } = await supabase
+        .from("privacy_settings")
+        .update(privacy)
+        .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error updating privacy settings:", error);
-    } else {
+      if (error) throw error;
       alert("Privacy settings updated successfully!");
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   if (!session) {
     return <Text>You need to be logged in to view your settings.</Text>;
+  }
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error: {error}</Text>;
   }
 
   return (
