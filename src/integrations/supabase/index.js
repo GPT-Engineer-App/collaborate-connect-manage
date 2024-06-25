@@ -278,3 +278,13 @@ export const useAddCategory = () => {
         },
     });
 };
+
+// New function to upload PNG files to Supabase bucket
+export const uploadPngToBucket = async (file) => {
+    const { data, error } = await supabase.storage
+        .from('files_bucket')
+        .upload(`public/${file.name}`, file);
+
+    if (error) throw new Error(error.message);
+    return data;
+};
