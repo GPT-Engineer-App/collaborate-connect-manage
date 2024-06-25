@@ -3,6 +3,7 @@ import { supabase, SupabaseProvider } from './index.js';
 import { useQueryClient } from '@tanstack/react-query';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { corsHeaders, handleOptionsRequest } from '../_shared/cors.ts';
 
 const SupabaseAuthContext = createContext();
 
@@ -49,8 +50,13 @@ export const SupabaseAuthProviderInner = ({ children }) => {
     setLoading(false);
   };
 
+  const handleRequest = (req, res) => {
+    if (handleOptionsRequest(req, res)) return;
+    res.writeHead(200, corsHeaders);
+  };
+
   return (
-    <SupabaseAuthContext.Provider value={{ session, loading, logout }}>
+    <SupabaseAuthContext.Provider value={{ session, loading, logout, handleRequest }}>
       {children}
     </SupabaseAuthContext.Provider>
   );

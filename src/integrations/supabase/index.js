@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { corsHeaders, handleOptionsRequest } from '../_shared/cors.ts';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_PROJECT_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
@@ -11,9 +12,11 @@ export function SupabaseProvider({ children }) {
     return React.createElement(QueryClientProvider, { client: queryClient }, children);
 }
 
-const fromSupabase = async (query) => {
+const fromSupabase = async (query, req, res) => {
+    if (handleOptionsRequest(req, res)) return;
     const { data, error } = await query;
     if (error) throw new Error(error.message);
+    res.writeHead(200, corsHeaders);
     return data;
 };
 
@@ -131,13 +134,13 @@ const fromSupabase = async (query) => {
 
 export const useGroups = () => useQuery({
     queryKey: ['groups'],
-    queryFn: () => fromSupabase(supabase.from('groups').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('groups').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddGroup = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newGroup) => fromSupabase(supabase.from('groups').insert([newGroup])),
+        mutationFn: (newGroup, req, res) => fromSupabase(supabase.from('groups').insert([newGroup]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('groups');
         },
@@ -146,13 +149,13 @@ export const useAddGroup = () => {
 
 export const useTasks = () => useQuery({
     queryKey: ['tasks'],
-    queryFn: () => fromSupabase(supabase.from('tasks').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('tasks').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newTask) => fromSupabase(supabase.from('tasks').insert([newTask])),
+        mutationFn: (newTask, req, res) => fromSupabase(supabase.from('tasks').insert([newTask]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('tasks');
         },
@@ -161,13 +164,13 @@ export const useAddTask = () => {
 
 export const useProfiles = () => useQuery({
     queryKey: ['profiles'],
-    queryFn: () => fromSupabase(supabase.from('profiles').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('profiles').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddProfile = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newProfile) => fromSupabase(supabase.from('profiles').insert([newProfile])),
+        mutationFn: (newProfile, req, res) => fromSupabase(supabase.from('profiles').insert([newProfile]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('profiles');
         },
@@ -176,13 +179,13 @@ export const useAddProfile = () => {
 
 export const useTaskTags = () => useQuery({
     queryKey: ['task_tags'],
-    queryFn: () => fromSupabase(supabase.from('task_tags').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('task_tags').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddTaskTag = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newTaskTag) => fromSupabase(supabase.from('task_tags').insert([newTaskTag])),
+        mutationFn: (newTaskTag, req, res) => fromSupabase(supabase.from('task_tags').insert([newTaskTag]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('task_tags');
         },
@@ -191,13 +194,13 @@ export const useAddTaskTag = () => {
 
 export const useFiles = () => useQuery({
     queryKey: ['files'],
-    queryFn: () => fromSupabase(supabase.from('files').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('files').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddFile = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newFile) => fromSupabase(supabase.from('files').insert([newFile])),
+        mutationFn: (newFile, req, res) => fromSupabase(supabase.from('files').insert([newFile]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('files');
         },
@@ -206,13 +209,13 @@ export const useAddFile = () => {
 
 export const useComments = () => useQuery({
     queryKey: ['comments'],
-    queryFn: () => fromSupabase(supabase.from('comments').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('comments').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddComment = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newComment) => fromSupabase(supabase.from('comments').insert([newComment])),
+        mutationFn: (newComment, req, res) => fromSupabase(supabase.from('comments').insert([newComment]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('comments');
         },
@@ -221,13 +224,13 @@ export const useAddComment = () => {
 
 export const useTags = () => useQuery({
     queryKey: ['tags'],
-    queryFn: () => fromSupabase(supabase.from('tags').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('tags').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddTag = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newTag) => fromSupabase(supabase.from('tags').insert([newTag])),
+        mutationFn: (newTag, req, res) => fromSupabase(supabase.from('tags').insert([newTag]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('tags');
         },
@@ -236,13 +239,13 @@ export const useAddTag = () => {
 
 export const useUsers = () => useQuery({
     queryKey: ['users'],
-    queryFn: () => fromSupabase(supabase.from('users').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('users').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newUser) => fromSupabase(supabase.from('users').insert([newUser])),
+        mutationFn: (newUser, req, res) => fromSupabase(supabase.from('users').insert([newUser]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('users');
         },
@@ -251,13 +254,13 @@ export const useAddUser = () => {
 
 export const useSessions = () => useQuery({
     queryKey: ['sessions'],
-    queryFn: () => fromSupabase(supabase.from('sessions').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('sessions').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddSession = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newSession) => fromSupabase(supabase.from('sessions').insert([newSession])),
+        mutationFn: (newSession, req, res) => fromSupabase(supabase.from('sessions').insert([newSession]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('sessions');
         },
@@ -266,13 +269,13 @@ export const useAddSession = () => {
 
 export const useCategories = () => useQuery({
     queryKey: ['categories'],
-    queryFn: () => fromSupabase(supabase.from('categories').select('*')),
+    queryFn: (context) => fromSupabase(supabase.from('categories').select('*'), context.queryKey[1], context.queryKey[2]),
 });
 
 export const useAddCategory = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newCategory) => fromSupabase(supabase.from('categories').insert([newCategory])),
+        mutationFn: (newCategory, req, res) => fromSupabase(supabase.from('categories').insert([newCategory]), req, res),
         onSuccess: () => {
             queryClient.invalidateQueries('categories');
         },
