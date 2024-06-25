@@ -16,44 +16,47 @@ const Messages = () => {
   }, [session]);
 
   const fetchConversations = async () => {
-    const { data, error } = await supabase
-      .from("conversations")
-      .select("id, provider_id, providers (name)")
-      .eq("user_id", session.user.id);
+    try {
+        const { data, error } = await supabase
+            .from("conversations")
+            .select("id, provider_id, providers (name)")
+            .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error fetching conversations:", error);
-    } else {
-      setConversations(data);
+        if (error) throw error;
+        setConversations(data);
+    } catch (error) {
+        console.error("Error fetching conversations:", error);
     }
   };
 
   const fetchMessages = async (conversationId) => {
-    const { data, error } = await supabase
-      .from("messages")
-      .select("*")
-      .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true });
+    try {
+        const { data, error } = await supabase
+            .from("messages")
+            .select("*")
+            .eq("conversation_id", conversationId)
+            .order("created_at", { ascending: true });
 
-    if (error) {
-      console.error("Error fetching messages:", error);
-    } else {
-      setSelectedConversation({ id: conversationId, messages: data });
+        if (error) throw error;
+        setSelectedConversation({ id: conversationId, messages: data });
+    } catch (error) {
+        console.error("Error fetching messages:", error);
     }
   };
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") return;
 
-    const { error } = await supabase
-      .from("messages")
-      .insert([{ conversation_id: selectedConversation.id, sender_id: session.user.id, content: newMessage }]);
+    try {
+        const { error } = await supabase
+            .from("messages")
+            .insert([{ conversation_id: selectedConversation.id, sender_id: session.user.id, content: newMessage }]);
 
-    if (error) {
-      console.error("Error sending message:", error);
-    } else {
-      setNewMessage("");
-      fetchMessages(selectedConversation.id);
+        if (error) throw error;
+        setNewMessage("");
+        fetchMessages(selectedConversation.id);
+    } catch (error) {
+        console.error("Error sending message:", error);
     }
   };
 

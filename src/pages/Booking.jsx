@@ -10,10 +10,14 @@ const Booking = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const navigate = useNavigate();
 
-  const handleBooking = () => {
-    // Handle booking logic here
-    console.log({ date, time, location, message, paymentMethod });
-    navigate("/confirmation");
+  const handleBooking = async () => {
+    try {
+        // Handle booking logic here
+        console.log({ date, time, location, message, paymentMethod });
+        navigate("/confirmation");
+    } catch (error) {
+        console.error("Error handling booking:", error);
+    }
   };
 
   return (

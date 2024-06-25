@@ -22,71 +22,76 @@ const Profile = () => {
   }, [session]);
 
   const fetchProfileData = async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("username, email, bio")
-      .eq("user_id", session.user.id)
-      .single();
+    try {
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("username, email, bio")
+            .eq("user_id", session.user.id)
+            .single();
 
-    if (error) {
-      console.error("Error fetching profile data:", error);
-    } else {
-      setProfileData(data);
+        if (error) throw error;
+        setProfileData(data);
+    } catch (error) {
+        console.error("Error fetching profile data:", error);
     }
   };
 
   const fetchServices = async () => {
-    const { data, error } = await supabase
-      .from("services")
-      .select("*")
-      .eq("user_id", session.user.id);
+    try {
+        const { data, error } = await supabase
+            .from("services")
+            .select("*")
+            .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error fetching services:", error);
-    } else {
-      setServices(data);
+        if (error) throw error;
+        setServices(data);
+    } catch (error) {
+        console.error("Error fetching services:", error);
     }
   };
 
   const handleProfileUpdate = async () => {
-    const { error } = await supabase
-      .from("profiles")
-      .update(profileData)
-      .eq("user_id", session.user.id);
+    try {
+        const { error } = await supabase
+            .from("profiles")
+            .update(profileData)
+            .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error updating profile:", error);
-    } else {
-      alert("Profile updated successfully!");
-      setIsEditing(false);
+        if (error) throw error;
+        alert("Profile updated successfully!");
+        setIsEditing(false);
+    } catch (error) {
+        console.error("Error updating profile:", error);
     }
   };
 
   const handleServiceUpdate = async () => {
-    const { error } = await supabase
-      .from("services")
-      .update(serviceData)
-      .eq("id", selectedService.id);
+    try {
+        const { error } = await supabase
+            .from("services")
+            .update(serviceData)
+            .eq("id", selectedService.id);
 
-    if (error) {
-      console.error("Error updating service:", error);
-    } else {
-      alert("Service updated successfully!");
-      setSelectedService(null);
+        if (error) throw error;
+        alert("Service updated successfully!");
+        setSelectedService(null);
+    } catch (error) {
+        console.error("Error updating service:", error);
     }
   };
 
   const handleServiceDelete = async (serviceId) => {
-    const { error } = await supabase
-      .from("services")
-      .delete()
-      .eq("id", serviceId);
+    try {
+        const { error } = await supabase
+            .from("services")
+            .delete()
+            .eq("id", serviceId);
 
-    if (error) {
-      console.error("Error deleting service:", error);
-    } else {
-      fetchServices();
-      setSelectedService(null);
+        if (error) throw error;
+        fetchServices();
+        setSelectedService(null);
+    } catch (error) {
+        console.error("Error deleting service:", error);
     }
   };
 
