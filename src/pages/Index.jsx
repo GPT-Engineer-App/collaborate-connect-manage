@@ -29,25 +29,27 @@ const Index = () => {
       return;
     }
 
-    const { error } = await supabase
-      .from("favorites")
-      .insert([{ user_id: session.user.id, provider_id: providerId }]);
+    try {
+      const { error } = await supabase
+        .from("favorites")
+        .insert([{ user_id: session.user.id, provider_id: providerId }]);
 
-    if (error) {
-      console.error("Error adding favorite:", error);
-    } else {
+      if (error) throw error;
       alert("Added to favorites!");
+    } catch (error) {
+      console.error("Error adding favorite:", error);
     }
   };
 
   const fetchProvidersWithinRadius = async (center, radius) => {
-    const { data, error } = await supabase
-      .rpc('get_providers_within_radius', { center_lat: center[0], center_lng: center[1], radius });
+    try {
+      const { data, error } = await supabase
+        .rpc('get_providers_within_radius', { center_lat: center[0], center_lng: center[1], radius });
 
-    if (error) {
-      console.error("Error fetching providers:", error);
-    } else {
+      if (error) throw error;
       setProviders(data);
+    } catch (error) {
+      console.error("Error fetching providers:", error);
     }
   };
 

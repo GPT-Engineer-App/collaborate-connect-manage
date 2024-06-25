@@ -18,41 +18,44 @@ const Favorites = () => {
   }, [session]);
 
   const fetchFavorites = async () => {
-    const { data, error } = await supabase
-      .from("favorites")
-      .select("provider_id, providers (id, name, category, imageUrl)")
-      .eq("user_id", session.user.id);
+    try {
+      const { data, error } = await supabase
+        .from("favorites")
+        .select("provider_id, providers (id, name, category, imageUrl)")
+        .eq("user_id", session.user.id);
 
-    if (error) {
-      console.error("Error fetching favorites:", error);
-    } else {
+      if (error) throw error;
       setFavorites(data);
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
     }
   };
 
   const fetchUsers = async () => {
-    const { data, error } = await supabase
-      .from("users")
-      .select("id, username, email");
+    try {
+      const { data, error } = await supabase
+        .from("users")
+        .select("id, username, email");
 
-    if (error) {
-      console.error("Error fetching users:", error);
-    } else {
+      if (error) throw error;
       setUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
     }
   };
 
   const handleRemoveFavorite = async (providerId) => {
-    const { error } = await supabase
-      .from("favorites")
-      .delete()
-      .eq("user_id", session.user.id)
-      .eq("provider_id", providerId);
+    try {
+      const { error } = await supabase
+        .from("favorites")
+        .delete()
+        .eq("user_id", session.user.id)
+        .eq("provider_id", providerId);
 
-    if (error) {
-      console.error("Error removing favorite:", error);
-    } else {
+      if (error) throw error;
       fetchFavorites();
+    } catch (error) {
+      console.error("Error removing favorite:", error);
     }
   };
 
